@@ -1,5 +1,8 @@
 const express = require('express');
 const app = express();
+const Stripe = require('stripe');
+const stripe = Stripe('sk_test_51OHwkvJZ4arl6xajnsWhSgm3h2oeN2V8P9Oq4TqFPaUKCgx96iPXtfvEtaQjvxySBM0CRJOknQVFUHKQCz0s3dW0006TDrdQKK');
+
 
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -16,10 +19,15 @@ mongoose.set("strictQuery", false);
 const PORT = process.env.PORT || 1000;
 app.use(express.json());
 app.use(cors());
+app.use(express.static("public"));
 
 // const ImportData = require('./DataImport.js');
 // const productRoute = require('./Routes/ProductRoutes.js');
 // const { notFound, errorHandler } = require('./Middleware/Errors.js');
+app.use(
+    cors()
+)
+
 
 
 
@@ -75,6 +83,10 @@ const Product = mongoose.model("Product", {
         type: Number,
         required: true,
     },
+    quantity: {
+        type: Number,
+        required: true,
+    },
     date:{
         type: Date,
         default: Date.now,
@@ -84,6 +96,7 @@ const Product = mongoose.model("Product", {
         default: true,
     }
 })
+
 
 app.post('/addproduct', async (req, res) => {
     let products = await Product.find({});
@@ -140,10 +153,9 @@ app.get ("/allproducts", async (req,res) => {
 
 })
 
-//creating endpoint for edding products in cart 
-app.post("/addtocart", async (req,res) => {
-console.log(req.body)
-})
+
+
+
 
 //Shema creating for User model
 
@@ -215,23 +227,123 @@ app.post("/login", async (req,res) =>{
       }
 })
 
-// app.post("/addtocart", async (req,res) =>{
+const fetchUser = async(req,res,next) => {
+    const token = req.header("auth-token");
+    if(!token){
+        res.status(401).send({errors: "Please authenticate using valid" })
+    } else {
+        try{
+const data = jwt.verify(token, "secret_ecom");
+req.user = data.user;
+next();
+        } catch (error) {
+res.status(401).send({errors:"Please authenticate using a valid token"})
+        }
 
-// })
+    }
+}
 
- //Create an endpoint for saving the product in cart
- app.post('/getcart', async (req, res) => {
+
+
+
+//creating endpoint for adding products in cart 
+app.post("/addtocart", fetchUser, async (req,res) => {
+    console.log("added", req.body.itemId)
+    let userData = await Users.findOne({_id:req.user.id});
+    userData.cartData[req.body.itemId] += 1;
+    await Users.findOneAndUpdate({_id: req.user.id}, {cartData: userData.cartData});
+    res.send("Added");
+    // const {id, image, name, price, quantity, searchTerm} = req.body;
+    // const product = await Product.create({id, image, name, price, quantity, searchTerm});
+    // res.send(product)
+console.log(req.body, req.user)
+})
+
+//creating endpoint to remove product from cartdata
+app.post("/removefromcart", fetchUser, async(req,res) => {
+    console.log("removed", req.body.itemId)
+    let userData = await Users.findOne({_id:req.user.id});
+    if(userData.cartData[req.body.itemId]>0)
+    userData.cartData[req.body.itemId] -= 1;
+    await Users.findOneAndUpdate({_id: req.user.id}, {cartData: userData.cartData});
+    res.send("Removed");
+})
+
+//creating endpoint to get cartdata
+
+
+app.post('/getcart', fetchUser, async (req, res) => {
     console.log("Get Cart");
     let userData = await Users.findOne({_id:req.user.id});
     res.json(userData.cartData);
   
     })
 
+//stripe
+
+
+
+app.post("/create-checkout-session", async (req, res)=>{
+    try{
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types:["card"],
+            mode:"payment",
+            line_items: req.body.items.map(item => {
+                return{
+                    price_data:{
+                        currency:"EUR",
+                        unit_amount: item.price,
+
+                    },
+                    quantity: item.quantity
+                }
+            }),
+            success_url: 'http://localhost:3000/success',
+            cancel_url: 'http://localhost:3000/cancel'
+        })
+
+        res.json({url: session.url})
+
+    }catch(e){
+     res.status(500).json({error:e.message})
+    }
+})
+
+
+
+
+
+// app.post('/stripe/change', cors(), async (req, res) => {
+//  let {amount, id} = req.body;
+//  console.log(amount, id)
+//  try {
+//     const payment = await stripe.paymentIntents.create({
+//       amount: amount,
+//       currency: "EUR",
+//       description: "Your Company Description",
+//       payment_method: id,
+//       confirm: true,
+//     });
+//     console.log("stripe-routes.js 19 | payment", payment);
+//     res.json({
+//       message: "Payment Successful",
+//       success: true,
+//     });
+//   } catch (error) {
+//     console.log("stripe-routes.js 17 | error", error);
+//     res.json({
+//       message: "Payment Failed",
+//       success: false,
+//     });
+//   }
+//   });
+
 // creating endpoint for adding products in the cart
 
-app.post("/addtocart", async(req,res)=>{
-    console.log(req.body);
-})
+// app.post("/addtocart", async(req,res)=>{
+//     console.log(req.body);
+// })
+
 
 app.listen (PORT, () => {
     console.log(`server running in port ${PORT}`)

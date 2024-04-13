@@ -1,9 +1,16 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { ShopContext } from "../Context/ShopContext";
+//import Stripe from "../Stripe/StripeContainer";
 
 const CartItems = () => {
  
-  const {all_products, cartItems, removeFromCart, getTotalCartAmount} = useContext(ShopContext);
+  const {data, setAll_Products, cartItems, removeFromCart, getTotalCartAmount, checkout} = useContext(ShopContext);
+
+  useEffect(()=>{
+    setAll_Products()
+
+  }, [])
+
 
   return (
     <div>
@@ -16,7 +23,7 @@ const CartItems = () => {
         <p>Remove</p>
       </div>
       <hr />
-      {all_products.map((e)=>{
+      {data.map((e)=>{
 
         if(cartItems[e.id]>0)
         {
@@ -35,7 +42,7 @@ const CartItems = () => {
         return null;
       })}
       
-      <div>
+      <section>
         <div>
           <h1>Cart Totals</h1>
           <div>
@@ -54,10 +61,14 @@ const CartItems = () => {
               <h3>${getTotalCartAmount()}</h3>
             </div>
           </div>
-          <button>PROCEED TO CHECKOUT</button>
+ 
+          <button onClick={checkout}>PROCEED TO CHECKOUT</button>
+
+
+          {/* <Stripe/> */}
         </div>
        
-      </div>
+      </section>
     </div>
   );
 };

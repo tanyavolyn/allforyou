@@ -22,6 +22,8 @@ import Login from "./screens/Login";
 import Product from "./screens/Product";
 import Cart from "./screens/Cart";
 import { ShopContext } from "./Context/ShopContext";
+import Success from "./screens/PaymantSuccess";
+
 
 function App() {
 
@@ -68,6 +70,9 @@ const {getTotalCartItems} = useContext(ShopContext);
     
   
     <Route path="/cart" element={<Cart/>}/>
+    <Route path="/cancel" element={<Cart/>}/>
+    <Route path="/success" element={<Success/>}/>
+  
    </Routes>
 
    </Router>
