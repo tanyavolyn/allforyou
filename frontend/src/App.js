@@ -23,6 +23,7 @@ import Product from "./screens/Product";
 import Cart from "./screens/Cart";
 import { ShopContext } from "./Context/ShopContext";
 import Success from "./screens/PaymantSuccess";
+import Stripe from './Stripe/StripeContainer';
 
 
 function App() {
@@ -71,7 +72,8 @@ const {getTotalCartItems} = useContext(ShopContext);
   
     <Route path="/cart" element={<Cart/>}/>
     <Route path="/cancel" element={<Cart/>}/>
-    <Route path="/success" element={<Success/>}/>
+    <Route path="/success" element={<Success/>}/> */}
+    <Route path="/StripeContainer" element={<Stripe/>}/>
   
    </Routes>
 

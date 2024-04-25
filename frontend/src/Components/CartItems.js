@@ -1,10 +1,14 @@
 import React, { useContext, useEffect } from "react";
 import { ShopContext } from "../Context/ShopContext";
 //import Stripe from "../Stripe/StripeContainer";
+import {
+  Link
+} from "react-router-dom";
+
 
 const CartItems = () => {
  
-  const {data, setAll_Products, cartItems, removeFromCart, getTotalCartAmount, checkout} = useContext(ShopContext);
+  const {data, setAll_Products, cartItems, removeFromCart, getTotalCartAmount} = useContext(ShopContext);
 
   useEffect(()=>{
     setAll_Products()
@@ -62,7 +66,8 @@ const CartItems = () => {
             </div>
           </div>
  
-          <button onClick={checkout}>PROCEED TO CHECKOUT</button>
+          
+<Link to={"/StripeContainer"}><button>PROCEED TO CHECKOUT</button></Link>
 
 
           {/* <Stripe/> */}

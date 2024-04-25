@@ -281,68 +281,68 @@ app.post('/getcart', fetchUser, async (req, res) => {
 
 //stripe
 
-
-
-app.post("/create-checkout-session", async (req, res)=>{
-    try{
-        const session = await stripe.checkout.sessions.create({
-            payment_method_types:["card"],
-            mode:"payment",
-            line_items: req.body.items.map(item => {
-                return{
-                    price_data:{
-                        currency:"EUR",
-                        unit_amount: item.price,
-
-                    },
-                    quantity: item.quantity
-                }
-            }),
-            success_url: 'http://localhost:3000/success',
-            cancel_url: 'http://localhost:3000/cancel'
-        })
-
-        res.json({url: session.url})
-
-    }catch(e){
-     res.status(500).json({error:e.message})
+app.post("/stripe/charge", cors(), async (req, res) => {
+    console.log("stripe-routes.js 9 | route reached", req.body);
+    let { amount, id } = req.body;
+    console.log("stripe-routes.js 10 | amount and id", amount, id);
+    try {
+      const payment = await stripe.paymentIntents.create({
+        amount: amount,
+        currency: "EUR",
+        description: "Your Company Description",
+        payment_method: id,
+        confirm: true,
+      });
+      console.log("stripe-routes.js 19 | payment", payment);
+      res.json({
+        message: "Payment Successful",
+        success: true,
+      });
+    } catch (error) {
+      console.log("stripe-routes.js 17 | error", error);
+      res.json({
+        message: "Payment Failed",
+        success: false,
+      });
     }
-})
+  });
 
 
+// app.post("/create-checkout-session", async (req, res)=>{
 
 
+//     try{
+//         const session = await stripe.checkout.sessions.create({
+//             payment_method_types:["card"],
+//             mode:"payment",
+//             line_items: req.body.items.map(item => {
+//                 return{
+//                     price_data:{
+//                         currency:"EUR",
+//                         unit_amount: item.price,
 
-// app.post('/stripe/change', cors(), async (req, res) => {
-//  let {amount, id} = req.body;
-//  console.log(amount, id)
-//  try {
-//     const payment = await stripe.paymentIntents.create({
-//       amount: amount,
-//       currency: "EUR",
-//       description: "Your Company Description",
-//       payment_method: id,
-//       confirm: true,
-//     });
-//     console.log("stripe-routes.js 19 | payment", payment);
-//     res.json({
-//       message: "Payment Successful",
-//       success: true,
-//     });
-//   } catch (error) {
-//     console.log("stripe-routes.js 17 | error", error);
-//     res.json({
-//       message: "Payment Failed",
-//       success: false,
-//     });
-//   }
-//   });
+//                     },
+//                     quantity: item.quantity
+//                 }
+//             }),
+//             success_url: 'http://localhost:3000/success',
+//             cancel_url: 'http://localhost:3000/cancel'
+//         })
 
-// creating endpoint for adding products in the cart
+//         res.json({url: session.url})
 
-// app.post("/addtocart", async(req,res)=>{
-//     console.log(req.body);
+//     }catch(e){
+//      res.status(500).json({error:e.message})
+//     }
+
+
 // })
+
+
+
+
+
+
 
 
 app.listen (PORT, () => {
