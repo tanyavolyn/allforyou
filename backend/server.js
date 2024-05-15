@@ -10,6 +10,7 @@ const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const path = require("path");
 const bodyParser = require("body-parser");
+const { start } = require('repl');
 app.use(bodyParser.urlencoded({extended: false}));
 
 
@@ -79,8 +80,16 @@ const Product = mongoose.model("Product", {
     //     type: String,
     //     required: true,
     // },
+    name: {
+        type: String,
+        required: true,
+    },
     price: {
         type: Number,
+        required: true,
+    },
+    size: {
+        type: String,
         required: true,
     },
     quantity: {
@@ -113,6 +122,7 @@ app.post('/addproduct', async (req, res) => {
         id: id,
         name: req.body.name,
         image: req.body.image,
+        size: req.body.size,
         //searchTerm: req.body.searchTerm,
         price: req.body.price
     });
@@ -284,9 +294,11 @@ app.post('/getcart', fetchUser, async (req, res) => {
 app.post("/stripe/charge", cors(), async (req, res) => {
     console.log("stripe-routes.js 9 | route reached", req.body);
     let { amount, id } = req.body;
+   
     console.log("stripe-routes.js 10 | amount and id", amount, id);
     try {
       const payment = await stripe.paymentIntents.create({
+        return_url: 'https://example.com/return_url',
         amount: amount,
         currency: "EUR",
         description: "Your Company Description",

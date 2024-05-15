@@ -6,9 +6,23 @@ import {
 } from "react-router-dom";
 
 
+
+
+
+
+
+
+
+
+
 const CartItems = () => {
  
   const {data, setAll_Products, cartItems, removeFromCart, getTotalCartAmount} = useContext(ShopContext);
+
+
+
+  
+
 
   useEffect(()=>{
     setAll_Products()
@@ -35,6 +49,7 @@ const CartItems = () => {
                     <div>
                       <img src={e.image} alt="Bild" />
                       <p>{e.name}</p>
+
                       <p>${e.price}</p>
                       <button>{cartItems[e.id]}</button>
                       <p>${e.price*cartItems[e.id]}</p>
