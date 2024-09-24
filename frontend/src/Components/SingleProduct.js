@@ -1,21 +1,34 @@
 import React, { useContext, useState } from "react";
 import { ShopContext } from "../Context/ShopContext";
-import Select from 'react-select';
+import CartItems from "./CartItems";
+
+
+
+
+
+//import Select from 'react-select';
+
+
+
 
 const SingleProduct = (itemsForSale) => {
  const {product} = itemsForSale;
 const {addToCart} = useContext(ShopContext);
 
-const options = [
-  { value: 'S', label: 'S' },
-  { value: 'M', label: 'M' },
-  { value: 'L', label: 'L' },
-  { value: 'XL', label: 'XL' },
-];
+
+
+// const options = [
+//   { value: 'S', label: 'S' },
+//   { value: 'M', label: 'M' },
+//   { value: 'L', label: 'L' },
+//   { value: 'XL', label: 'XL' },
+// ];
 
 const [selectedOption, setSelectedOption] = useState(null);
-
 console.log(selectedOption)
+
+
+
  return (
     <div>
   
@@ -31,16 +44,37 @@ console.log(selectedOption)
 
      
         <div className="productdisplay-right-size">
+
+
+        <select 
+ value={selectedOption}
+ onChange={e => setSelectedOption(e.target.value)}>
+          <option value="S">S</option>
+          <option value="M">M</option>
+          <option value="L">L</option>
+          <option value="XL">XL</option>
+</select>
+{/* 
         <Select
         defaultValue={selectedOption}
         onChange={setSelectedOption}
         options={options}
-        />
+        /> */}
+    
+  
+     
+
+
+
+
 
         </div>
-        <button onClick={()=>{addToCart(product.id)}}>ADD TO CART</button>
+        <button onClick={()=>{addToCart(product.id)} }>ADD TO CART</button>
+ 
+    
       
       </div>
+    
     </div>
   );
 };

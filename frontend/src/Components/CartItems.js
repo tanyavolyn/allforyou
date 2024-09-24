@@ -1,5 +1,7 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect} from "react";
 import { ShopContext } from "../Context/ShopContext";
+
+
 //import Stripe from "../Stripe/StripeContainer";
 import {
   Link
@@ -9,19 +11,10 @@ import {
 
 
 
-
-
-
-
-
-
 const CartItems = () => {
  
   const {data, setAll_Products, cartItems, removeFromCart, getTotalCartAmount} = useContext(ShopContext);
 
-
-
-  
 
 
   useEffect(()=>{
@@ -49,9 +42,12 @@ const CartItems = () => {
                     <div>
                       <img src={e.image} alt="Bild" />
                       <p>{e.name}</p>
+                      <p></p>
 
                       <p>${e.price}</p>
+
                       <button>{cartItems[e.id]}</button>
+                      
                       <p>${e.price*cartItems[e.id]}</p>
                       <img onClick={()=>{removeFromCart(e.id)}} alt="cross_icon" />
                     </div>
@@ -83,7 +79,6 @@ const CartItems = () => {
  
           
 <Link to={"/StripeContainer"}><button>PROCEED TO CHECKOUT</button></Link>
-
 
           {/* <Stripe/> */}
         </div>
