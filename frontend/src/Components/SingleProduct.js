@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { ShopContext } from "../Context/ShopContext";
-import CartItems from "./CartItems";
+
+
 
 
 
@@ -26,6 +27,7 @@ const {addToCart} = useContext(ShopContext);
 
 const [selectedOption, setSelectedOption] = useState(null);
 console.log(selectedOption)
+
 
 
 
@@ -69,7 +71,7 @@ console.log(selectedOption)
 
 
         </div>
-        <button onClick={()=>{addToCart(product.id)} }>ADD TO CART</button>
+        <button onClick={()=>{addToCart(product.id, selectedOption)} }>ADD TO CART</button>
  
     
       

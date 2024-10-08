@@ -23,6 +23,7 @@ const CartItems = () => {
   }, [])
 
 
+
   return (
     <div>
       <div>
@@ -34,15 +35,16 @@ const CartItems = () => {
         <p>Remove</p>
       </div>
       <hr />
-      {data.map((e)=>{
+      {data.map((e, selectedOption)=>{
 
         if(cartItems[e.id]>0)
+          console.log(selectedOption)
         {
           return  <div>
                     <div>
                       <img src={e.image} alt="Bild" />
                       <p>{e.name}</p>
-                      <p></p>
+             <p>{selectedOption}</p>
 
                       <p>${e.price}</p>
 

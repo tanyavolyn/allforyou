@@ -1,5 +1,7 @@
 import React, { createContext, useState } from "react";
-import { data } from "../data/data.js"
+import { data } from "../data/data.js";
+
+
 
 export const ShopContext = createContext(null);
 
@@ -67,11 +69,28 @@ if(localStorage.getItem("auth-token")){
     }
     return totalItem;
   }
+//change size
+
+// const changeSize = () => {
+//   cosnt [selectedSize, setSelectedSize] = useState('S');
+//   return (
+//     <select
+//       value={selectedSize}
+//       onChange={e => setSelectedSize(e.target.value)}
+//     >
+//       <option value="sizes">S</option>
+//       <option value="sizem">M</option>
+//       <option value="sizel">L</option>
+//       <option value="sizexl">XL</option>
+//     </select>
+//   );
+// }
 
 
 
-const addToCart = (itemId) => {
-setCartItems((prev) => ({...prev,[itemId]:prev[itemId]+1}))
+
+const addToCart = (itemId, selectedOption) => {
+setCartItems((prev) => ({...prev,[itemId]:prev[itemId]+1, [selectedOption]:prev[selectedOption]}))
 if(localStorage.getItem("auth-token")){
   fetch("http://localhost:8000/addtocart", {
     method: "POST",
@@ -80,12 +99,15 @@ if(localStorage.getItem("auth-token")){
       "auth-token": `${localStorage.getItem("auth-token")}`,
       "Content-Type": "application/json",
     },
-  body: JSON.stringify({"itemId":itemId}),
+  body: JSON.stringify({"itemId":itemId, "selectedOption": selectedOption}),
   })
   .then((res)=>res.json())
   .then((data)=>console.log(data))
+
 }
 }
+
+
 
 const removeFromCart = (itemId) => {
   setCartItems((prev) => ({...prev,[itemId]:prev[itemId]-1}))
