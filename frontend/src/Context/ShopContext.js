@@ -20,18 +20,18 @@ const ShopContextProvider = (itemsForSale) => {
   const[cartItems, setCartItems] = useState(getDefaultCart());
 
 //   useEffect(() => {
-// fetch("http://localhost:8000/allproducts") 
+// fetch("https://allforyou.onrender.com/allproducts") 
 // .then((res)=> res.json())
 // .then((data)=>setAll_Products(data))
 
 // },[])
 
 const setAll_Products = () => {
-  fetch("http://localhost:8000/allproducts") 
+  fetch("https://allforyou.onrender.com/allproducts") 
 .then((res)=> res.json())
 .then((data)=>setAll_Products(data))
 if(localStorage.getItem("auth-token")){
-  fetch("http://localhost:8000/getcart", {
+  fetch("https://allforyou.onrender.com/getcart", {
     method: "POST",
     headers: {
       Accept: "application/form-data",
@@ -97,7 +97,7 @@ setCartItems((prev) => ({
   quantity: (prev[itemId]?.quantity || 0 ) + 1, 
  size:selectedSize}, }))
 if(localStorage.getItem("auth-token")){
-  fetch("http://localhost:8000/addtocart", {
+  fetch("https://allforyou.onrender.com/addtocart", {
     method: "POST",
     headers: {
       Accept: "application/form-data",
@@ -116,7 +116,7 @@ if(localStorage.getItem("auth-token")){
 const removeFromCart = (itemId) => {
   setCartItems((prev) => ({...prev,[itemId]:prev[itemId]-1}))
   if(localStorage.getItem("auth-token")){
-    fetch("http://localhost:8000/removefromcart", {
+    fetch("https://allforyou.onrender.com/removefromcart", {
       method: "POST",
       headers: {
         Accept: "application/form-data",
@@ -131,7 +131,7 @@ const removeFromCart = (itemId) => {
   }
 
   const checkout = () => {
-    fetch("http://localhost:8000/create-checkout-session", {
+    fetch("https://allforyou.onrender.com/create-checkout-session", {
       method:"POST",
       headers:{
         "Content-Type":"application/json"
