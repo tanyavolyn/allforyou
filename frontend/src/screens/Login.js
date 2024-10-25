@@ -15,7 +15,7 @@ const changeHandler = (e) => {
     const login = async() => {
 console.log("Login Function Executed", formData)
 let responseData;
-await fetch ("http://localhost:8000/login", {
+await fetch ("https://allforyou.onrender.com/login", {
     method: "POST",
           headers:{
               Accept:"application/json",
@@ -34,7 +34,7 @@ await fetch ("http://localhost:8000/login", {
     const registrieren = async() => {
         console.log("Signup Function Executed", formData)
         let responseData;
-        await fetch ("http://localhost:8000/signup", {
+        await fetch ("https://allforyou.onrender.com/signup", {
             method: "POST",
                   headers:{
                       Accept:"application/json",
