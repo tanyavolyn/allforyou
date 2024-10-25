@@ -50,28 +50,29 @@ await fetch ("http://localhost:8000/login", {
                 }
     }
     
-
     return(
-        <div>
+        <div className='login-container'>
             <div>
-                <h1>{state}</h1>
-                <div>
-                    {state==="Registrieren" ? <input name="username" value={formData.username} onChange={changeHandler} type="text" placeholder="Name"/> : <></>}
-                    <input name="email" value={formData.email} onChange={changeHandler} type="email" placeholder="Email"/>
-                    <input name="password" value={formData.password} onChange={changeHandler}  type="password" placeholder="Passwort"/>
+                <div className='login-titel'>
+                <h2>{state}</h2>
+                </div>
+                <div className='login-input-form'>
+                    {state==="Registrieren" ? <input className="login-input" name="username" value={formData.username} onChange={changeHandler} type="text" placeholder="Name"/> : <></>}
+                    <input className="login-input" name="email" value={formData.email} onChange={changeHandler} type="email" placeholder="Email"/>
+                    <input className="login-input" name="password" value={formData.password} onChange={changeHandler}  type="password" placeholder="Passwort"/>
                 </div>
             </div>
-<button onClick={()=>{state==="Anmelden" ? login() : registrieren()}}>{state}</button>
+<button className="login-btn" onClick={()=>{state==="Anmelden" ? login() : registrieren()}}>{state}</button>
 {state==="Registrieren" 
-? <p>Haben Sie eine Account? <span onClick={()=>{setState("Anmelden")}}>Anmelden</span></p>
-: <p>Registrieren? <span onClick={()=>{setState("Registrieren")}}>Hier</span></p>
+? <p className='login-text'>Haben Sie einen Account? <span className="log-btn" onClick={()=>{setState("Anmelden")}}>Anmelden</span></p>
+: <p className='login-text'>Registrieren? <span className="log-btn" onClick={()=>{setState("Registrieren")}}>Hier</span></p>
 }
 
 
     
-        <div>
+        <div className='login-checkbox'>
             <input type="checkbox" name="" id=""/>
-            <p>Ich stimme die Datenschutzbestimmungen zu</p>
+            <p className='login-text'>Ich stimme die Datenschutzbestimmungen zu</p>
             </div>
             </div>
     )

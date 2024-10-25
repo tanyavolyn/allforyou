@@ -54,8 +54,11 @@ export const CheckoutForm = () => {
     <div className="card">
       {!messageSuccess ?
     <form onSubmit={handleSubmit} style={{ maxWidth: 400 }}>
-      <CardElement/>
-      <button>Pay</button>
+      <CardElement />
+<div className="pay-btn-container">
+      <button className="pay-btn">Pay</button>
+      </div>
+      
     </form>
 :
     <div>
@@ -67,3 +70,8 @@ export const CheckoutForm = () => {
       
   );
 };
+
+
+
+
+

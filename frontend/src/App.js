@@ -1,5 +1,5 @@
 
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -24,25 +24,32 @@ import Cart from "./screens/Cart";
 import { ShopContext } from "./Context/ShopContext";
 import Success from "./screens/PaymantSuccess";
 import Stripe from './Stripe/StripeContainer';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
+
 
 
 function App() {
 
 const {getTotalCartItems} = useContext(ShopContext);
+useEffect(()=>{
+AOS.init({duration:1000})
+}, [])
 
   return (
     <div className="box">
 
-    <div>
+    <div data-aos="fade-down">
 
 
     <Router>
       <div className="container">
-    <div>
-   <h1>All for you</h1>
+    <div >
+    <Link className="titel" to="/"><h1>All for you</h1></Link>
    </div>
 
-   <nav>
+   <nav data-aos="fade-down">
 
     <Link className="link" to="/">Home</Link>
     <Link className="link" to="/shop">Shop</Link>
@@ -51,13 +58,13 @@ const {getTotalCartItems} = useContext(ShopContext);
  
 
    </nav>
-   <div>
+   <div className="container-login" >
    {localStorage.getItem("auth-token") 
-   ? <button onClick={()=>{localStorage.removeItem("auth-token");window.location.replace("/")}}>Abmelden</button>
-   : <Link to="/login"><button>   Anmelden</button></Link>}
+   ? <button className="btn-login" onClick={()=>{localStorage.removeItem("auth-token");window.location.replace("/")}}><img className="login-icon" src="user.png" alt="bild" height="24px" width="24px"/>Abmelden</button>
+   : <Link to="/login" ><button className="btn-login"> <img className="login-icon" src="user.png" alt="bild" height="25px" width="25px"/>Anmelden</button></Link>}
 
-   <Link to="/cart">CART_ICON</Link>
-   <div>{getTotalCartItems()}</div>
+   <Link to="/cart" className="cart-icon"><img src="market.png" alt="bild" height="24px" width="24px"/> <p>({getTotalCartItems()})</p></Link>
+  
 
    </div>
    </div>
@@ -72,8 +79,9 @@ const {getTotalCartItems} = useContext(ShopContext);
   
     <Route path="/cart" element={<Cart/>}/>
     <Route path="/cancel" element={<Cart/>}/>
-    <Route path="/success" element={<Success/>}/> */}
+    <Route path="/success" element={<Success/>}/> 
     <Route path="/StripeContainer" element={<Stripe/>}/>
+
   
    </Routes>
 

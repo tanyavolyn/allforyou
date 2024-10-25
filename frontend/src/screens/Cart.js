@@ -4,7 +4,7 @@ import CartItems from "../Components/CartItems.js";
 
 const Cart = () => {
     return(
-        <div>
+        <div className="cart">
             <CartItems/>
            
         </div>

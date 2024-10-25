@@ -46,25 +46,26 @@ if(localStorage.getItem("auth-token")){
 
   const getTotalCartAmount = () => {
     let totalAmount = 0;
+   
     for(const item in cartItems) {
-      if(cartItems[item] >  0)
+      if(cartItems[item]?.quantity >  0)
       {
        //let itemInfo = all_products.find((product)=>product.id===Number(item));
        let itemInfo = data.find((product)=>product.id===Number(item));
-             totalAmount += cartItems[item] * itemInfo.price;
+             totalAmount += cartItems[item].quantity * itemInfo.price;
  
               }
     }
     return totalAmount.toFixed(2);
-  
+
   }
 
 
   const getTotalCartItems = () => {
     let totalItem = 0;
-    for (const item in cartItems) {
-      if(cartItems[item]>0){
-        totalItem += cartItems[item];
+    for (const itemId in cartItems) {
+      if(cartItems[itemId]?.quantity>0){
+        totalItem += cartItems[itemId].quantity;
       }
     }
     return totalItem;
@@ -89,8 +90,12 @@ if(localStorage.getItem("auth-token")){
 
 
 
-const addToCart = (itemId, selectedOption) => {
-setCartItems((prev) => ({...prev,[itemId]:prev[itemId]+1, [selectedOption]:prev[selectedOption]}))
+const addToCart = (itemId, selectedSize) => {
+setCartItems((prev) => ({
+  ...prev,
+  [itemId]: {
+  quantity: (prev[itemId]?.quantity || 0 ) + 1, 
+ size:selectedSize}, }))
 if(localStorage.getItem("auth-token")){
   fetch("http://localhost:8000/addtocart", {
     method: "POST",
@@ -99,10 +104,9 @@ if(localStorage.getItem("auth-token")){
       "auth-token": `${localStorage.getItem("auth-token")}`,
       "Content-Type": "application/json",
     },
-  body: JSON.stringify({"itemId":itemId, "selectedOption": selectedOption}),
+  body: JSON.stringify({"itemId":itemId, size: selectedSize}),
   })
   .then((res)=>res.json())
-  .then((data)=>console.log(data))
 
 }
 }
